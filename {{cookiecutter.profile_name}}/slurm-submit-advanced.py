@@ -88,9 +88,11 @@ def _update_memory_and_ntasks(arg_dict, MEMORY_PER_CPU, MEMORY_PER_PARTITION):
         arg_dict["mem"] = min(int(arg_dict["mem"]),
                               MEMORY_PER_PARTITION)
         AVAILABLE_MEM = arg_dict["ntasks"] * MEMORY_PER_CPU
+        ##
+        # Do not overwrite ntasks
         if arg_dict["mem"] > AVAILABLE_MEM:
-            arg_dict["ntasks"] = int(math.ceil(arg_dict["mem"] /
-                                               MEMORY_PER_CPU))
+            arg_dict["ntasks"] = arg_dict["ntasks"] #int(math.ceil(arg_dict["mem"] /
+                                                # MEMORY_PER_CPU))
     arg_dict["ntasks"] = min(int(config["cpus"]),
                              int(arg_dict["ntasks"]))
 
@@ -157,10 +159,13 @@ slurm_parser.add_argument(
 slurm_parser.add_argument(
     "--mem", help="minimum amount of real memory")
 
+##
+# gres flag
 opt_keys = ["array", "account", "begin", "cpus_per_task",
             "dependency", "workdir", "error", "job_name", "mail_type",
             "mail_user", "ntasks", "nodes", "output", "partition",
-            "quiet", "time", "wrap", "constraint", "mem"]
+            "quiet", "time", "wrap", "constraint", "mem",
+            "gres", "gres-flags" ]
 
 args = parser.parse_args()
 
